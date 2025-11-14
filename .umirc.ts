@@ -7,27 +7,84 @@ export default defineConfig({
   initialState: {},
   request: {},
   layout: {
-    title: '@umijs/max',
+    title: '基因检测管理系统',
   },
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/project/list',
     },
     {
-      name: '首页',
-      path: '/home',
-      component: './Home',
+      name: '检测项目管理',
+      path: '/project',
+      icon: 'ExperimentOutlined',
+      routes: [
+        {
+          path: '/project/list',
+          name: '项目列表',
+          component: './Project/List',
+        },
+        {
+          path: '/project/create',
+          name: '创建项目',
+          component: './Project/Create',
+          hideInMenu: true,
+        },
+        {
+          path: '/project/edit/:id',
+          name: '编辑项目',
+          component: './Project/Edit',
+          hideInMenu: true,
+        },
+      ],
     },
     {
-      name: '权限演示',
-      path: '/access',
-      component: './Access',
+      name: '报告查询管理',
+      path: '/report',
+      icon: 'FileTextOutlined',
+      routes: [
+        {
+          path: '/report/list',
+          name: '报告列表',
+          component: './Report/List',
+        },
+        {
+          path: '/report/detail/:id',
+          name: '报告详情',
+          component: './Report/Detail',
+          hideInMenu: true,
+        },
+      ],
     },
     {
-      name: ' CRUD 示例',
-      path: '/table',
-      component: './Table',
+      name: '用户管理',
+      path: '/user',
+      icon: 'UserOutlined',
+      routes: [
+        {
+          path: '/user/list',
+          name: '用户列表',
+          component: './User/List',
+        },
+        {
+          path: '/user/detail/:id',
+          name: '用户详情',
+          component: './User/Detail',
+          hideInMenu: true,
+        },
+      ],
+    },
+    {
+      name: '内容管理',
+      path: '/content',
+      icon: 'EditOutlined',
+      routes: [
+        {
+          path: '/content/about',
+          name: '关于我们',
+          component: './Content/About',
+        },
+      ],
     },
   ],
   npmClient: 'npm',

@@ -1,6 +1,9 @@
 {
-  "*.{md,json}": [
+  "*.md": [
     "prettier --cache --write"
+  ],
+  "package.json": [
+    "prettier --cache --write --parser json"
   ],
   "*.{js,jsx}": [
     "max lint --fix --eslint-only",
