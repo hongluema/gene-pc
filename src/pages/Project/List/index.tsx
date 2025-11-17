@@ -1,20 +1,31 @@
+import request from '@/config/request';
 import {
   deleteProject,
   getInstitutionList,
   queryProjectList,
 } from '@/services/project';
+import { TOKEN_KEY } from '@/utils/token';
 import { PlusOutlined, QrcodeOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
 import { Button, Image, message, Modal, Popconfirm, Space, Tag } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const ProjectList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [qrcodeVisible, setQrcodeVisible] = useState(false);
   const [currentQrcode, setCurrentQrcode] = useState('');
   const [currentProjectName, setCurrentProjectName] = useState('');
+
+  useEffect(() => {
+    getProjects();
+  }, []);
+
+  const getProjects = async () => {
+    const res: any = await request.get('/api/projects')
+    console.log('>>>>res', res);
+  }
 
   // 查看二维码
   const handleViewQRCode = (record: API.Project) => {
