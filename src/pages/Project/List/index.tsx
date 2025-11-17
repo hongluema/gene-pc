@@ -66,79 +66,7 @@ const ProjectList: React.FC = () => {
       title: '项目名称',
       dataIndex: 'name',
       key: 'name',
-      ellipsis: true,
       width: 200,
-    },
-    {
-      title: '检测机构',
-      dataIndex: 'institutionName',
-      key: 'institutionName',
-      ellipsis: true,
-      width: 180,
-      request: async () => {
-        const res = await getInstitutionList();
-        return (res.data || []).map((item) => ({
-          label: item.name,
-          value: item.id,
-        }));
-      },
-      fieldProps: {
-        showSearch: true,
-      },
-    },
-    {
-      title: '检测项目',
-      dataIndex: 'testItemNames',
-      key: 'testItemNames',
-      search: false,
-      render: (_, record) => (
-        <Space wrap>
-          {record.testItemNames?.map((item, index) => (
-            <Tag color="blue" key={index}>
-              {item}
-            </Tag>
-          ))}
-        </Space>
-      ),
-    },
-    {
-      title: '检测地点',
-      dataIndex: 'location',
-      key: 'location',
-      search: false,
-      ellipsis: true,
-      width: 150,
-    },
-    {
-      title: '有效期',
-      dataIndex: 'dateRange',
-      key: 'dateRange',
-      search: false,
-      width: 200,
-      render: (_, record) => {
-        if (record.startDate && record.endDate) {
-          return `${record.startDate} ~ ${record.endDate}`;
-        }
-        return '-';
-      },
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      width: 100,
-      valueEnum: {
-        1: { text: '启用', status: 'Success' },
-        0: { text: '禁用', status: 'Default' },
-      },
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      valueType: 'dateTime',
-      search: false,
-      width: 180,
     },
     {
       title: '操作',
@@ -193,21 +121,17 @@ const ProjectList: React.FC = () => {
           </Button>,
         ]}
         request={async (params) => {
-          const res = await queryProjectList({
-            current: params.current,
-            pageSize: params.pageSize,
-            name: params.name,
-            institutionId: params.institutionName,
-            status: params.status,
-          });
+          const res: any = await request.get('/api/projects');
+
+          console.log('>>>>res tsble', res);
+          const data = res?.content?.rows;
           return {
-            data: res.data?.list || [],
-            success: res.success,
-            total: res.data?.total || 0,
+            data: data || [],
+            success: true,
+            total: data.length || 0,
           };
         }}
         columns={columns}
-        scroll={{ x: 1300 }}
       />
 
       {/* 二维码弹窗 */}
