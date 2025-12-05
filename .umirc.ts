@@ -14,30 +14,30 @@ export default defineConfig({
       path: '/',
       redirect: '/project/list',
     },
-    {
-      name: '检测项目管理',
-      path: '/project',
-      icon: 'ExperimentOutlined',
-      routes: [
-        {
-          path: '/project/list',
-          name: '项目列表',
-          component: './Project/List',
-        },
-        {
-          path: '/project/create',
-          name: '创建项目',
-          component: './Project/Create',
-          hideInMenu: true,
-        },
-        {
-          path: '/project/edit/:id',
-          name: '编辑项目',
-          component: './Project/Edit',
-          hideInMenu: true,
-        },
-      ],
-    },
+    // {
+    //   name: '检测项目管理',
+    //   path: '/project',
+    //   icon: 'ExperimentOutlined',
+    //   routes: [
+    //     {
+    //       path: '/project/list',
+    //       name: '项目列表',
+    //       component: './Project/List',
+    //     },
+    //     {
+    //       path: '/project/create',
+    //       name: '创建项目',
+    //       component: './Project/Create',
+    //       hideInMenu: true,
+    //     },
+    //     {
+    //       path: '/project/edit/:id',
+    //       name: '编辑项目',
+    //       component: './Project/Edit',
+    //       hideInMenu: true,
+    //     },
+    //   ],
+    // },
     {
       name: '报告查询管理',
       path: '/report',
@@ -66,26 +66,26 @@ export default defineConfig({
           name: '用户列表',
           component: './User/List',
         },
-        {
-          path: '/user/detail/:id',
-          name: '用户详情',
-          component: './User/Detail',
-          hideInMenu: true,
-        },
+        // {
+        //   path: '/user/detail/:id',
+        //   name: '用户详情',
+        //   component: './User/Detail',
+        //   hideInMenu: true,
+        // },
       ],
     },
-    {
-      name: '内容管理',
-      path: '/content',
-      icon: 'EditOutlined',
-      routes: [
-        {
-          path: '/content/about',
-          name: '关于我们',
-          component: './Content/About',
-        },
-      ],
-    },
+    // {
+    //   name: '内容管理',
+    //   path: '/content',
+    //   icon: 'EditOutlined',
+    //   routes: [
+    //     {
+    //       path: '/content/about',
+    //       name: '关于我们',
+    //       component: './Content/About',
+    //     },
+    //   ],
+    // },
   ],
   npmClient: 'npm',
 });

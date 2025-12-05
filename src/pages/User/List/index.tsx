@@ -1,13 +1,23 @@
+import request from '@/config/request';
 import { queryUserList } from '@/services/user';
 import { EyeOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
 import { Avatar, Space } from 'antd';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const UserList: React.FC = () => {
   const actionRef = useRef<ActionType>();
+
+  useEffect(() => {
+    getUsers();
+  }, [])
+
+  const getUsers = async () => {
+    const res: any =await request.get('/api/samples/phone?phone=18519165666');
+    console.log('>>>>res', res);
+  }
 
   const columns: ProColumns<API.User>[] = [
     {
@@ -34,10 +44,10 @@ const UserList: React.FC = () => {
       key: 'gender',
       width: 80,
       search: false,
-      valueEnum: {
-        男: { text: '男' },
-        女: { text: '女' },
-      },
+      // valueEnum: {
+      //   男: { text: '男' },
+      //   女: { text: '女' },
+      // },
     },
     {
       title: '年龄',
@@ -48,8 +58,8 @@ const UserList: React.FC = () => {
     },
     {
       title: '身份证号',
-      dataIndex: 'idCard',
-      key: 'idCard',
+      dataIndex: 'id_number',
+      key: 'id_number',
       width: 180,
     },
     {
@@ -60,8 +70,8 @@ const UserList: React.FC = () => {
     },
     {
       title: '注册时间',
-      dataIndex: 'registeredAt',
-      key: 'registeredAt',
+      dataIndex: 'created_at',
+      key: 'created_at',
       valueType: 'dateTime',
       width: 180,
       hideInSearch: true,
@@ -80,13 +90,13 @@ const UserList: React.FC = () => {
         },
       },
     },
-    {
-      title: '提交样本数',
-      dataIndex: 'submissionCount',
-      key: 'submissionCount',
-      width: 120,
-      search: false,
-    },
+    // {
+    //   title: '提交样本数',
+    //   dataIndex: 'submissionCount',
+    //   key: 'submissionCount',
+    //   width: 120,
+    //   search: false,
+    // },
     {
       title: '操作',
       key: 'option',
@@ -95,8 +105,8 @@ const UserList: React.FC = () => {
       width: 100,
       render: (_, record) => (
         <Space size="small">
-          <a onClick={() => history.push(`/user/detail/${record.id}`)}>
-            <EyeOutlined /> 查看
+          <a onClick={() => console.log('>>>record', record)}>
+            作废
           </a>
         </Space>
       ),
@@ -113,19 +123,12 @@ const UserList: React.FC = () => {
           labelWidth: 'auto',
         }}
         request={async (params) => {
-          const res = await queryUserList({
-            current: params.current,
-            pageSize: params.pageSize,
-            name: params.name,
-            idCard: params.idCard,
-            phone: params.phone,
-            startTime: params.startTime,
-            endTime: params.endTime,
-          });
+          const res: any =await request.get('/api/users/list');
+          console.log('>>>>res', res);
           return {
-            data: res.data?.list || [],
+            data: res.data.list || [],
             success: res.success,
-            total: res.data?.total || 0,
+            total:  res.data.total,
           };
         }}
         columns={columns}

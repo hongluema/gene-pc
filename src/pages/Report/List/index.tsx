@@ -10,6 +10,7 @@ import { history } from '@umijs/max';
 import { Badge, message, Space } from 'antd';
 import React, { useRef, useState } from 'react';
 import UploadModal from './components/UploadModal';
+import request from '@/config/request';
 
 const ReportList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -44,48 +45,49 @@ const ReportList: React.FC = () => {
 
   const columns: ProColumns<API.Report>[] = [
     {
+      title: '样本ID',
+      dataIndex: 'sample_id',
+      key: 'sample_id',
+      width: 150,
+    },
+    {
       title: '用户姓名',
-      dataIndex: 'userName',
-      key: 'userName',
+      dataIndex: 'name',
+      key: 'name',
       width: 100,
     },
     {
       title: '身份证号',
-      dataIndex: 'userIdCard',
-      key: 'idCard',
+      dataIndex: 'id_number',
+      key: 'id_number',
       width: 180,
     },
     {
       title: '手机号',
-      dataIndex: 'userPhone',
+      dataIndex: 'phone',
       key: 'phone',
       width: 130,
     },
-    {
-      title: '样本ID',
-      dataIndex: 'sampleId',
-      key: 'sampleId',
-      width: 150,
-    },
+    
     {
       title: '项目名称',
-      dataIndex: 'projectName',
-      key: 'projectName',
+      dataIndex: 'program_name',
+      key: 'program_name',
       width: 150,
       ellipsis: true,
     },
     {
       title: '检测机构',
-      dataIndex: 'institutionName',
-      key: 'institutionName',
+      dataIndex: 'org_name',
+      key: 'org_name',
       width: 150,
       ellipsis: true,
       search: false,
     },
     {
       title: '提交时间',
-      dataIndex: 'submitTime',
-      key: 'submitTime',
+      dataIndex: 'created_at',
+      key: 'created_at',
       valueType: 'dateTime',
       width: 180,
       hideInSearch: true,
@@ -114,20 +116,20 @@ const ReportList: React.FC = () => {
         2: { text: '已上传', status: 'Success' },
       },
       render: (_, record) => {
-        if (record.status === 1) {
+        if (record.sample_data_name) {
           return <Badge status="default" text="待上传" />;
         }
         return <Badge status="success" text="已上传" />;
       },
     },
-    {
-      title: '上传时间',
-      dataIndex: 'uploadTime',
-      key: 'uploadTime',
-      valueType: 'dateTime',
-      width: 180,
-      search: false,
-    },
+    // {
+    //   title: '上传时间',
+    //   dataIndex: 'uploadTime',
+    //   key: 'uploadTime',
+    //   valueType: 'dateTime',
+    //   width: 180,
+    //   search: false,
+    // },
     {
       title: '操作',
       key: 'option',
@@ -165,22 +167,12 @@ const ReportList: React.FC = () => {
           labelWidth: 'auto',
         }}
         request={async (params) => {
-          const res = await queryReportList({
-            current: params.current,
-            pageSize: params.pageSize,
-            userName: params.userName,
-            idCard: params.idCard,
-            phone: params.phone,
-            sampleId: params.sampleId,
-            projectName: params.projectName,
-            status: params.status,
-            startTime: params.startTime,
-            endTime: params.endTime,
-          });
+          const res: any =await request.get('/api/samples/list');
+          console.log('>>>>res', res);
           return {
-            data: res.data?.list || [],
+            data: res.data.list || [],
             success: res.success,
-            total: res.data?.total || 0,
+            total:  res.data.total,
           };
         }}
         columns={columns}
