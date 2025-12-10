@@ -7,7 +7,7 @@ import {
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Badge, message, Space } from 'antd';
+import { Badge, Descriptions, Modal, message, Space } from 'antd';
 import React, { useRef, useState } from 'react';
 import UploadModal from './components/UploadModal';
 import request from '@/config/request';
@@ -16,6 +16,8 @@ const ReportList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [currentReport, setCurrentReport] = useState<API.Report | null>(null);
+  const [detailVisible, setDetailVisible] = useState(false);
+  const [detailRecord, setDetailRecord] = useState<API.Report | null>(null);
 
   // 上传报告
   const handleUpload = (record: API.Report) => {
@@ -41,6 +43,18 @@ const ReportList: React.FC = () => {
       record.reportFileUrl,
       `${record.userName}-${record.sampleId}-检测报告.pdf`,
     );
+  };
+
+  // 查看详情
+  const handleDetailClick = (record: API.Report) => {
+    setDetailRecord(record);
+    setDetailVisible(true);
+  };
+
+  // 关闭详情弹窗
+  const handleCloseDetail = () => {
+    setDetailVisible(false);
+    setDetailRecord(null);
   };
 
   const columns: ProColumns<API.Report>[] = [
@@ -83,6 +97,9 @@ const ReportList: React.FC = () => {
       width: 150,
       ellipsis: true,
       search: false,
+      render: (_, record) => {
+        return (record as any).org_name || '测试机构';
+      },
     },
     {
       title: '提交时间',
@@ -116,7 +133,7 @@ const ReportList: React.FC = () => {
         2: { text: '已上传', status: 'Success' },
       },
       render: (_, record) => {
-        if (record.sample_data_name) {
+        if ((record as any).sample_data_name) {
           return <Badge status="default" text="待上传" />;
         }
         return <Badge status="success" text="已上传" />;
@@ -143,7 +160,8 @@ const ReportList: React.FC = () => {
               <UploadOutlined /> 上传
             </a>
           ) : (
-            <>
+              <>
+                <a onClick={() => handleDetailClick(record)}>详情</a>
               <a onClick={() => history.push(`/report/detail/${record.id}`)}>
                 <EyeOutlined /> 查看
               </a>
@@ -189,6 +207,71 @@ const ReportList: React.FC = () => {
         }}
         onSuccess={handleUploadSuccess}
       />
+
+      {/* 详情弹窗 */}
+      <Modal
+        title="报告详情"
+        open={detailVisible}
+        onCancel={handleCloseDetail}
+        footer={null}
+        width={700}
+      >
+        {detailRecord && (
+          <Descriptions column={1} bordered>
+            <Descriptions.Item label="样本ID">
+              {(detailRecord as any).sample_id || detailRecord.sampleId}
+            </Descriptions.Item>
+            <Descriptions.Item label="用户姓名">
+              {(detailRecord as any).name || detailRecord.userName}
+            </Descriptions.Item>
+            <Descriptions.Item label="身份证号">
+              {(detailRecord as any).id_number || detailRecord.userIdCard}
+            </Descriptions.Item>
+            <Descriptions.Item label="手机号">
+              {(detailRecord as any).phone || detailRecord.userPhone}
+            </Descriptions.Item>
+            <Descriptions.Item label="项目名称">
+              {(detailRecord as any).program_name || detailRecord.projectName}
+            </Descriptions.Item>
+            <Descriptions.Item label="检测机构">
+              {(detailRecord as any).org_name || '测试机构' }
+            </Descriptions.Item>
+            <Descriptions.Item label="报告状态">
+              {detailRecord.status === 1 ? (
+                <Badge status="default" text="待上传" />
+              ) : (
+                <Badge status="success" text="已上传" />
+              )}
+            </Descriptions.Item>
+            <Descriptions.Item label="提交时间">
+              {(detailRecord as any).created_at || detailRecord.submitTime || detailRecord.createdAt}
+            </Descriptions.Item>
+            {detailRecord.reportDate && (
+              <Descriptions.Item label="报告日期">
+                {detailRecord.reportDate}
+              </Descriptions.Item>
+            )}
+            {detailRecord.uploadTime && (
+              <Descriptions.Item label="上传时间">
+                {detailRecord.uploadTime}
+              </Descriptions.Item>
+            )}
+            {detailRecord.reportFileUrl && (
+              <Descriptions.Item label="报告文件">
+                <a href={detailRecord.reportFileUrl} target="_blank" rel="noopener noreferrer">
+                  查看报告
+                </a>
+              </Descriptions.Item>
+            )}
+            {detailRecord.remark && (
+              <Descriptions.Item label="备注">
+                {detailRecord.remark}
+              </Descriptions.Item>
+            )}
+            
+          </Descriptions>
+        )}
+      </Modal>
     </PageContainer>
   );
 };
