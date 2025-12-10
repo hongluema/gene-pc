@@ -2,15 +2,18 @@ import request from '@/config/request';
 import { queryUserList } from '@/services/user';
 import { EyeOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { PageContainer, ProTable } from '@ant-design/pro-components';
+import { PageContainer, ProForm, ProFormSelect, ProFormText, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Avatar, Descriptions, Modal, Space } from 'antd';
+import { Avatar, Descriptions, Form, message, Modal, Space } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 
 const UserList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [detailVisible, setDetailVisible] = useState(false);
   const [currentRecord, setCurrentRecord] = useState<API.User | null>(null);
+  const [editVisible, setEditVisible] = useState(false);
+  const [editRecord, setEditRecord] = useState<API.User | null>(null);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     getUsers();
@@ -29,6 +32,47 @@ const UserList: React.FC = () => {
   const handleCloseDetail = () => {
     setDetailVisible(false);
     setCurrentRecord(null);
+  };
+
+  const handleEditClick = (record: API.User) => {
+    setEditRecord(record);
+    setEditVisible(true);
+    // 设置表单初始值
+    form.setFieldsValue({
+      name: record.name,
+      gender: record.gender,
+      age: record.age,
+      idCard: (record as any).id_number || record.idCard,
+      phone: record.phone,
+    });
+  };
+
+  const handleCloseEdit = () => {
+    setEditVisible(false);
+    setEditRecord(null);
+    form.resetFields();
+  };
+
+  const handleEditSubmit = async (values: any) => {
+    if (!editRecord) return;
+
+    try {
+      const res: any = await request.post('/api/users/update', {
+        user_id: editRecord.id,
+        ...values,
+      });
+
+      if (res.success) {
+        message.success('更新成功');
+        handleCloseEdit();
+        // 刷新表格
+        actionRef.current?.reload();
+      } else {
+        message.error(res.errorMessage || '更新失败');
+      }
+    } catch (error) {
+      message.error('更新失败');
+    }
   };
 
   const columns: ProColumns<API.User>[] = [
@@ -120,6 +164,9 @@ const UserList: React.FC = () => {
           <a onClick={() => handleDetailClick(record)}>
             详情
           </a>
+          <a onClick={() => handleEditClick(record)}>
+            编辑
+          </a>
           <a onClick={() => console.log('>>>record', record)}>
             作废
           </a>
@@ -171,6 +218,71 @@ const UserList: React.FC = () => {
             <Descriptions.Item label="注册时间">{(currentRecord as any).created_at || currentRecord.registeredAt}</Descriptions.Item>
           </Descriptions>
         )}
+      </Modal>
+      <Modal
+        title="编辑用户"
+        open={editVisible}
+        onCancel={handleCloseEdit}
+        footer={null}
+        width={600}
+      >
+        <ProForm
+          form={form}
+          onFinish={handleEditSubmit}
+          submitter={{
+            searchConfig: {
+              submitText: '保存',
+            },
+            resetButtonProps: {
+              style: {
+                display: 'none',
+              },
+            },
+          }}
+        >
+          <ProFormText
+            name="name"
+            label="姓名"
+            rules={[{ required: true, message: '请输入姓名' }]}
+            width="md"
+          />
+          <ProFormSelect
+            name="gender"
+            label="性别"
+            options={[
+              { label: '男', value: '男' },
+              { label: '女', value: '女' },
+            ]}
+            rules={[{ required: true, message: '请选择性别' }]}
+            width="md"
+          />
+          <ProFormText
+            name="age"
+            label="年龄"
+            fieldProps={{
+              type: 'number',
+            }}
+            width="md"
+          />
+          <ProFormText
+            name="idCard"
+            label="身份证号"
+            rules={[
+              { required: true, message: '请输入身份证号' },
+              { pattern: /^[1-9]\d{5}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[\dXx]$/, message: '请输入正确的身份证号' },
+            ]}
+            width="md"
+          />
+          <ProFormText
+            name="phone"
+            label="手机号"
+            rules={[
+              { required: true, message: '请输入手机号' },
+              { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号' },
+            ]}
+            width="md"
+          />
+        </ProForm>
       </Modal>
     </PageContainer>
   );
