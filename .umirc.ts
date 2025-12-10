@@ -79,6 +79,18 @@ export default defineConfig({
         // },
       ],
     },
+    {
+      name: '配置管理',
+      path: '/config',
+      icon: 'SettingOutlined',
+      routes: [
+        {
+          path: '/config',
+          name: '配置',
+          component: './Config',
+        },
+      ],
+    }
     // {
     //   name: '内容管理',
     //   path: '/content',
