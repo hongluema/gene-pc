@@ -54,15 +54,35 @@ const ReportList: React.FC = () => {
   };
 
   // 下载报告
-  const handleDownload = (record: API.Report) => {
-    if (!record.reportFileUrl) {
+  const handleDownload = async (record: API.Report) => {
+    const sampleDataId = (record as any).sample_data_id;
+    if (!sampleDataId) {
       message.warning('暂无报告文件');
       return;
     }
-    downloadReport(
-      record.reportFileUrl,
-      `${record.userName}-${record.sampleId}-检测报告.pdf`,
-    );
+
+    try {
+      const url = `/api/report/pdf/local?pk=${sampleDataId}`;
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error('下载失败');
+      }
+
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      const fileName = `${(record as any).name || record.userName || '报告'}-${sampleDataId}.pdf`;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+      message.success('下载成功');
+    } catch (error: any) {
+      message.error(error?.message || '下载失败');
+    }
   };
 
   // 查看详情
