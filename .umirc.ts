@@ -10,6 +10,10 @@ export default defineConfig({
   layout: {
     title: '基因检测管理系统',
   },
+  define: {
+    'process.env.DEV_API_URL': JSON.stringify(process.env.DEV_API_URL || ''),
+    'process.env.API_URL': JSON.stringify(process.env.API_URL || 'https://app.oriomics.cn'),
+  },
   routes: [
     {
       path: '/',

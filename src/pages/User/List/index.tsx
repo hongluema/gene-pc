@@ -42,7 +42,7 @@ const UserList: React.FC = () => {
       name: record.name,
       gender: record.gender,
       age: record.age,
-      idCard: (record as any).id_number || record.idCard,
+      id_number: (record as any).id_number || record.idCard,
       phone: record.phone,
     });
   };
@@ -58,11 +58,11 @@ const UserList: React.FC = () => {
 
     try {
       const res: any = await request.post('/api/users/update', {
-        user_id: editRecord.id,
+        user_id: editRecord.user_id,
         ...values,
       });
-
-      if (res.success) {
+      console.log('>>>>res', res);
+      if (res.status_code === 200) {
         message.success('更新成功');
         handleCloseEdit();
         // 刷新表格
@@ -265,7 +265,7 @@ const UserList: React.FC = () => {
             width="md"
           />
           <ProFormText
-            name="idCard"
+            name="id_number"
             label="身份证号"
             rules={[
               { required: true, message: '请输入身份证号' },

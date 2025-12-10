@@ -1,8 +1,18 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
+// 调试环境变量
+// 在 UmiJS 中，环境变量需要以 UMI_APP_ 开头才能在浏览器中访问
+console.log('>>> process.env:', process.env);
+console.log('>>> UMI_APP_DEV_API_URL:', process.env.UMI_APP_DEV_API_URL);
+console.log('>>> UMI_APP_API_URL:', process.env.UMI_APP_API_URL);
+
+const baseURL = process.env.NODE_ENV === 'development' ? process.env.UMI_APP_DEV_API_URL : process.env.UMI_APP_API_URL;
+console.log('>>> baseURL:', baseURL);
+
 // Simple axios instance
 const instance: AxiosInstance = axios.create({
-  baseURL: (process as any)?.env?.API_URL || 'https://app.oriomics.cn',
+  // 使用 UMI_APP_ 前缀的环境变量，或者通过 define 配置注入的变量
+  baseURL,
   timeout: 15000,
 });
 
