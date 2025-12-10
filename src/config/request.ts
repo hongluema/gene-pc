@@ -6,7 +6,7 @@ console.log('>>> process.env:', process.env);
 console.log('>>> UMI_APP_DEV_API_URL:', process.env.UMI_APP_DEV_API_URL);
 console.log('>>> UMI_APP_API_URL:', process.env.UMI_APP_API_URL);
 
-const baseURL = process.env.NODE_ENV === 'development' ? process.env.UMI_APP_DEV_API_URL : process.env.UMI_APP_API_URL;
+const baseURL = process.env.NODE_ENV === 'development' ? process.env.UMI_APP_API_URL : process.env.UMI_APP_API_URL;
 console.log('>>> baseURL:', baseURL);
 
 // Simple axios instance

@@ -11,6 +11,7 @@ import { Badge, Descriptions, Form, Modal, message, Space } from 'antd';
 import React, { useRef, useState } from 'react';
 import UploadModal from './components/UploadModal';
 import request from '@/config/request';
+import Show from '@/components/Show';
 
 const ReportList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -34,6 +35,22 @@ const ReportList: React.FC = () => {
     setCurrentReport(null);
     message.success('报告上传成功');
     actionRef.current?.reload();
+  };
+
+  // 查看报告
+  const handleView = async (record: API.Report) => {
+    const sampleDataId = (record as any).sample_data_id;
+    if (!sampleDataId) {
+      message.warning('样本ID不存在');
+      return;
+    }
+
+    try {
+      const url = `/api/report/pdf/local?pk=${sampleDataId}`;
+      window.open(url, '_blank');
+    } catch (error: any) {
+      message.error(error?.errorMessage || '获取报告失败');
+    }
   };
 
   // 下载报告
@@ -89,7 +106,7 @@ const ReportList: React.FC = () => {
 
     try {
       const res: any = await request.post('/api/samples/update', {
-        id: editRecord.sample_id,
+        id: (editRecord as any).sample_id || editRecord.sampleId,
         ...values,
       });
 
@@ -212,12 +229,18 @@ const ReportList: React.FC = () => {
               <>
                 <a onClick={() => handleDetailClick(record)}>详情</a>
                 <a onClick={() => handleEditClick(record)}>编辑</a>
-              <a onClick={() => history.push(`/report/detail/${record.id}`)}>
-                <EyeOutlined /> 查看
-              </a>
-              <a onClick={() => handleDownload(record)}>
-                <DownloadOutlined /> 下载
-              </a>
+                <Show when={(record as any).sample_data_id}>
+                  <>
+                  <a onClick={() => handleView(record)}>
+                    <EyeOutlined /> 查看
+                  </a>
+                  <a onClick={() => handleDownload(record)}>
+                    <DownloadOutlined /> 下载
+                  </a>
+                  </>
+                </Show>
+              
+              
             </>
           )}
         </Space>
