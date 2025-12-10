@@ -1,4 +1,5 @@
 import { defineConfig } from '@umijs/max';
+const proxyConfig = require('./proxy.config');
 
 export default defineConfig({
   antd: {},
@@ -88,4 +89,5 @@ export default defineConfig({
     // },
   ],
   npmClient: 'npm',
+  proxy: proxyConfig,
 });

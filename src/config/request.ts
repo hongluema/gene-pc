@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 // Simple axios instance
 const instance: AxiosInstance = axios.create({
-  baseURL: (process as any)?.env?.API_URL || 'http://localhost:8002',
+  baseURL: (process as any)?.env?.API_URL || 'https://app.oriomics.cn',
   timeout: 15000,
 });
 

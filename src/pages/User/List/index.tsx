@@ -4,11 +4,13 @@ import { EyeOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Avatar, Space } from 'antd';
-import React, { useEffect, useRef } from 'react';
+import { Avatar, Descriptions, Modal, Space } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 
 const UserList: React.FC = () => {
   const actionRef = useRef<ActionType>();
+  const [detailVisible, setDetailVisible] = useState(false);
+  const [currentRecord, setCurrentRecord] = useState<API.User | null>(null);
 
   useEffect(() => {
     getUsers();
@@ -19,19 +21,29 @@ const UserList: React.FC = () => {
     console.log('>>>>res', res);
   }
 
+  const handleDetailClick = (record: API.User) => {
+    setCurrentRecord(record);
+    setDetailVisible(true);
+  };
+
+  const handleCloseDetail = () => {
+    setDetailVisible(false);
+    setCurrentRecord(null);
+  };
+
   const columns: ProColumns<API.User>[] = [
-    {
-      title: '头像',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      width: 80,
-      search: false,
-      render: (_, record) => (
-        <Avatar src={record.avatar} size={48}>
-          {record.name?.charAt(0)}
-        </Avatar>
-      ),
-    },
+    // {
+    //   title: '头像',
+    //   dataIndex: 'avatar',
+    //   key: 'avatar',
+    //   width: 80,
+    //   search: false,
+    //   render: (_, record) => (
+    //     <Avatar src={record.avatar} size={48}>
+    //       {record.name?.charAt(0)}
+    //     </Avatar>
+    //   ),
+    // },
     {
       title: '姓名',
       dataIndex: 'name',
@@ -105,6 +117,9 @@ const UserList: React.FC = () => {
       width: 100,
       render: (_, record) => (
         <Space size="small">
+          <a onClick={() => handleDetailClick(record)}>
+            详情
+          </a>
           <a onClick={() => console.log('>>>record', record)}>
             作废
           </a>
@@ -134,6 +149,29 @@ const UserList: React.FC = () => {
         columns={columns}
         scroll={{ x: 1200 }}
       />
+      <Modal
+        title="用户详情"
+        open={detailVisible}
+        onCancel={handleCloseDetail}
+        footer={null}
+        width={600}
+      >
+        {currentRecord && (
+          <Descriptions column={1} bordered>
+            {/* <Descriptions.Item label="头像">
+              <Avatar src={currentRecord.avatar} size={64}>
+                {currentRecord.name?.charAt(0)}
+              </Avatar>
+            </Descriptions.Item> */}
+            <Descriptions.Item label="姓名">{currentRecord.name}</Descriptions.Item>
+            <Descriptions.Item label="性别">{currentRecord.gender}</Descriptions.Item>
+            <Descriptions.Item label="年龄">{currentRecord.age}</Descriptions.Item>
+            <Descriptions.Item label="身份证号">{(currentRecord as any).id_number || currentRecord.idCard}</Descriptions.Item>
+            <Descriptions.Item label="手机号">{currentRecord.phone}</Descriptions.Item>
+            <Descriptions.Item label="注册时间">{(currentRecord as any).created_at || currentRecord.registeredAt}</Descriptions.Item>
+          </Descriptions>
+        )}
+      </Modal>
     </PageContainer>
   );
 };
