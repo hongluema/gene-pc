@@ -17,7 +17,7 @@ export default defineConfig({
   routes: [
     {
       path: '/',
-      redirect: '/project/list',
+      redirect: '/report/list',
     },
     // {
     //   name: '检测项目管理',
@@ -70,6 +70,24 @@ export default defineConfig({
           path: '/user/list',
           name: '用户列表',
           component: './User/List',
+        },
+        // {
+        //   path: '/user/detail/:id',
+        //   name: '用户详情',
+        //   component: './User/Detail',
+        //   hideInMenu: true,
+        // },
+      ],
+    },
+    {
+      name: '申请管理',
+      path: '/apply',
+      icon: 'FileAddOutlined',
+      routes: [
+        {
+          path: '/apply/list',
+          name: '申请列表',
+          component: './Apply/List',
         },
         // {
         //   path: '/user/detail/:id',
