@@ -75,14 +75,26 @@ const ApplyList: React.FC = () => {
     },
     {
       title: '申请人姓名',
-      dataIndex: 'apply_user_id',
-      key: 'apply_user_id',
+      dataIndex: 'apply_user_name',
+      key: 'apply_user_name',
       width: 120,
     },
     {
       title: '申请人手机号',
       dataIndex: 'apply_user_phone',
       key: 'apply_user_phone',
+      width: 130,
+    },
+    {
+      title: '检测人姓名',
+      dataIndex: 'sample_name',
+      key: 'sample_name',
+      width: 120,
+    },
+    {
+      title: '检测人手机号',
+      dataIndex: 'sample_phone',
+      key: 'sample_phone',
       width: 130,
     },
     {
