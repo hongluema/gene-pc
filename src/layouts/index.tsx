@@ -32,7 +32,7 @@ const Layout: React.FC = () => {
 
   return (
     <ProLayout
-      logo="/static/iii.png"
+      // logo="/static/iii.png"
       title="翱锐基因检测管理系统"
       location={location}
       route={clientRoutes[1]}
