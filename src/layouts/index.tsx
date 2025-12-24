@@ -33,7 +33,7 @@ const Layout: React.FC = () => {
   return (
     <ProLayout
       logo="https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg"
-      title="基因检测管理系统"
+      title="翱锐基因检测管理系统"
       location={location}
       route={clientRoutes[1]}
       menuItemRender={(item, dom) => {
