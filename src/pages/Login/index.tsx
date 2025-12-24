@@ -4,7 +4,6 @@ import { message } from 'antd';
 import React from 'react';
 import { history } from '@umijs/max';
 import styles from './index.less';
-
 const Login: React.FC = () => {
   const handleSubmit = async (values: { phone: string; password: string }) => {
     const { phone, password } = values;
@@ -36,8 +35,8 @@ const Login: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <LoginForm
-          logo="https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg"
-          title="基因检测管理系统"
+          // logo={'@/assets/logo.png'}
+          title="翱锐基因检测管理系统"
           subTitle="欢迎登录"
           onFinish={async (values) => {
             await handleSubmit(values as { phone: string; password: string });

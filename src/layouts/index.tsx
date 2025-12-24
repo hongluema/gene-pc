@@ -32,7 +32,7 @@ const Layout: React.FC = () => {
 
   return (
     <ProLayout
-      logo="https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg"
+      logo="/static/iii.png"
       title="翱锐基因检测管理系统"
       location={location}
       route={clientRoutes[1]}
@@ -60,7 +60,7 @@ const Layout: React.FC = () => {
       avatarProps={
         initialState?.currentUser
           ? {
-              src: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+              src: '/static/logo.png',
               title: initialState.currentUser.name,
               size: 'small',
               render: (_: any, dom: any) => {
