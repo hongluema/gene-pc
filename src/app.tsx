@@ -4,24 +4,20 @@
 
 // 全局初始化数据配置，用于 Layout 用户信息和权限初始化
 // 更多信息见文档：https://umijs.org/docs/api/runtime-config#getinitialstate
-export async function getInitialState(): Promise<{ name: string; isLoggedIn: boolean }> {
+export async function getInitialState(): Promise<{
+  name: string;
+  isLoggedIn: boolean;
+  currentUser?: { name: string; phone: string };
+}> {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  return { name: '@umijs/max', isLoggedIn };
-}
+  const userPhone = localStorage.getItem('userPhone') || '';
 
-export const layout = () => {
   return {
-    logo: 'https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg',
-    menu: {
-      locale: false,
-    },
-    logout: () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('userPhone');
-      window.location.href = '/login';
-    },
+    name: '@umijs/max',
+    isLoggedIn,
+    currentUser: isLoggedIn ? { name: '管理员', phone: userPhone } : undefined,
   };
-};
+}
 
 // 路由守卫
 export function onRouteChange({ location }: any) {

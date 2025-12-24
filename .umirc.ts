@@ -7,9 +7,10 @@ export default defineConfig({
   model: {},
   initialState: {},
   request: {},
-  layout: {
-    title: '基因检测管理系统',
-  },
+  // layout: {
+  //   title: '基因检测管理系统',
+  //   locale: false,
+  // },
   define: {
     'process.env.DEV_API_URL': JSON.stringify(process.env.DEV_API_URL || ''),
     'process.env.API_URL': JSON.stringify(process.env.API_URL || 'https://app.oriomics.cn'),
