@@ -46,7 +46,7 @@ const ReportList: React.FC = () => {
     }
 
     try {
-      const url = `/api/report/pdf/local?pk=${sampleDataId}`;
+      const url = `${process.env.UMI_APP_API_URL}/api/report/pdf/local?pk=${sampleDataId}`;
       window.open(url, '_blank');
     } catch (error: any) {
       message.error(error?.errorMessage || '获取报告失败');
@@ -62,7 +62,7 @@ const ReportList: React.FC = () => {
     }
 
     try {
-      const url = `/api/report/pdf/local?pk=${sampleDataId}`;
+      const url = `${process.env.UMI_APP_API_URL}/api/report/pdf/local?pk=${sampleDataId}`;
       const response = await fetch(url);
       
       if (!response.ok) {
@@ -220,9 +220,9 @@ const ReportList: React.FC = () => {
       },
       render: (_, record) => {
         if ((record as any).sample_data_name) {
-          return <Badge status="default" text="待上传" />;
+          return <Badge status="default" text="已上传" />;
         }
-        return <Badge status="success" text="已上传" />;
+        return <Badge status="success" text="待上传" />;
       },
     },
     // {
