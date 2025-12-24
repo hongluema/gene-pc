@@ -104,6 +104,12 @@ const ApplyList: React.FC = () => {
       width: 150,
     },
     {
+      title: '样本试管编号',
+      dataIndex: 'sample_code',
+      key: 'sample_code',
+      width: 150,
+    },
+    {
       title: '申请类型',
       dataIndex: 'type',
       key: 'type',
